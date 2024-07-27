@@ -9,5 +9,7 @@ package com.group9.musicplayer.Model;
  * @author psalm
  */
 public class Song {
+    private String title;
+    private String artist;
     
 }
