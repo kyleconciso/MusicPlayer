@@ -25,7 +25,7 @@ public class MusicPlayerView extends javax.swing.JFrame {
     //if the song is playing
     private static boolean isPlaying = false;
     
-    
+    //needed for commit
     
     /**
      * Creates new form MusicPlayerView
