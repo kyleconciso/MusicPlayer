@@ -4,17 +4,30 @@
  */
 package com.group9.musicplayer.Model;
 
-/**
- *
- * @author psalm
- */
+import javax.persistence.*;
+
+
+@Entity
+@Table(name = "Song")
 public class Song {
+    
+    @Id
+    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id;
+    @Column(name="title")
     private String title;
+    @Column(name="artist")
     private String artist;
+    @Column(name="album")
     private String album;
+    @Column(name="year")
     private int year;
+    @Column(name="gebre")
     private String genre;
+    @Column(name="filePath")
     private String filePath;
+    @Column(name="coverFilePath")
     private String coverFilePath;
 
     public Song(String title, String artist, String album, int year, String genre, String filePath, String coverFilePath) {
