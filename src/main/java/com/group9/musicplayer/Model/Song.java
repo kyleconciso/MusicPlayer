@@ -15,21 +15,28 @@ public class Song {
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
+    
     @Column(name="title")
     private String title;
+    
     @Column(name="artist")
     private String artist;
+    
     @Column(name="album")
     private String album;
-    @Column(name="year")
+    
+    @Column(name="releaseYear")
     private int year;
-    @Column(name="gebre")
+    
+    @Column(name="genre")
     private String genre;
+    
     @Column(name="filePath")
     private String filePath;
+    
     @Column(name="coverFilePath")
     private String coverFilePath;
-
+   
     public Song(String title, String artist, String album, int year, String genre, String filePath, String coverFilePath) {
         this.title = title;
         this.artist = artist;
@@ -38,6 +45,10 @@ public class Song {
         this.genre = genre;
         this.filePath = filePath;
         this.coverFilePath = coverFilePath;
+    }
+    
+    public Song() {
+
     }
 
     public String getTitle() {

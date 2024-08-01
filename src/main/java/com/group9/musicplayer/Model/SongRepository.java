@@ -19,23 +19,23 @@ public class SongRepository {
     private EntityManager em = null;
 
     public SongRepository() {
-       emf = Persistence.createEntityManagerFactory("songs-db");
-        em = emf.createEntityManager(); // Name from persistence.xml
+       emf = Persistence.createEntityManagerFactory("songs-db"); // Name from persistence.xml
+        em = emf.createEntityManager();
     }
 
-    public void persistEmployee(Song e) {
+    public void persist(Song e) {
         em.getTransaction().begin(); // Start transaction
         em.persist(e);
         em.getTransaction().commit(); // Commit changes
     }
 
-    public void mergeEmployee(Song e) {
+    public void merge(Song e) {
         em.getTransaction().begin(); // Start transaction
         em.merge(e);
         em.getTransaction().commit(); // Commit changes
     }
 
-    public void removeEmployee(Song e) {
+    public void remove(Song e) {
         em.getTransaction().begin(); // Start transaction
         em.remove(e);
         em.getTransaction().commit(); // Commit changes
@@ -46,7 +46,7 @@ public class SongRepository {
     }
 
     public List<Song> list() {
-        return em.createQuery("FROM model.Song m", Song.class).getResultList();
+        return em.createQuery("from Song m", Song.class).getResultList();
     }
 
     public void close() {
