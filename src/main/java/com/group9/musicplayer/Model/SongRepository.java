@@ -46,7 +46,7 @@ public class SongRepository {
     }
 
     public List<Song> list() {
-        return em.createQuery("FROM model.Employee m", Song.class).getResultList();
+        return em.createQuery("FROM model.Song m", Song.class).getResultList();
     }
 
     public void close() {
