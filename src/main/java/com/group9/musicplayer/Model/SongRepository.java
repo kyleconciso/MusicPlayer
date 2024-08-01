@@ -19,7 +19,7 @@ public class SongRepository {
     private EntityManager em = null;
 
     public SongRepository() {
-       emf = Persistence.createEntityManagerFactory("employees-db");
+       emf = Persistence.createEntityManagerFactory("songs-db");
         em = emf.createEntityManager(); // Name from persistence.xml
     }
 
