@@ -9,7 +9,7 @@ import com.group9.musicplayer.View.RoundedBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangllie2D;
+import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -32,7 +32,13 @@ public class MusicPlayerView extends javax.swing.JFrame implements PropertyChang
             case "volume" : {
                 
             }
-            case "playback" : {
+            case "playbackTime" : {
+                
+            }
+            case "currentSong" : {
+                
+            }
+            case "lyricsOpen" : {
                 
             }
         }
