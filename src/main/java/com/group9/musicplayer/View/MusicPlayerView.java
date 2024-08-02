@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -19,17 +21,17 @@ import javax.swing.*;
  *
  * @author psalm
  */
-public class MusicPlayerView extends javax.swing.JFrame {
+public class MusicPlayerView extends javax.swing.JFrame implements PropertyChangeListener {
+    
+    // PCS
+    public void propertyChange(PropertyChangeEvent evt) {
+        
+    }
     
     
-    //if the song is playing
-    private static boolean isPlaying = false;
+    // Class
+    private boolean isPlaying;
     
-    //needed for commit
-    
-    /**
-     * Creates new form MusicPlayerView
-     */
     public MusicPlayerView() {
         initComponents();
         LyricsArea.setBorder(new RoundedBorder(30));
@@ -369,7 +371,22 @@ public class MusicPlayerView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea LyricsArea;
+    private javax.swing.JLabel albumLabel;
+    private javax.swing.JLabel albumLabel1;
+    private javax.swing.JLabel albumLabel2;
+    private javax.swing.JLabel artistLabel;
+    private javax.swing.JLabel artistLabel1;
+    private javax.swing.JLabel artistLabel2;
+    private javax.swing.JLabel covertLabel;
+    private javax.swing.JLabel covertLabel1;
+    private javax.swing.JLabel covertLabel2;
     private javax.swing.JSlider durationSlider;
+    private javax.swing.JLabel genreLabel;
+    private javax.swing.JLabel genreLabel1;
+    private javax.swing.JLabel genreLabel2;
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -380,8 +397,23 @@ public class MusicPlayerView extends javax.swing.JFrame {
     private javax.swing.JButton nextButton;
     private javax.swing.JButton pauseandplayButton;
     private javax.swing.JButton previousButton;
+    private javax.swing.JPanel songInfoPanel;
+    private javax.swing.JPanel songInfoPanel1;
+    private javax.swing.JPanel songInfoPanel2;
     private javax.swing.JTextField songNameplace;
+    private javax.swing.JPanel songPanel;
+    private javax.swing.JPanel songPanel1;
+    private javax.swing.JPanel songPanel2;
     private javax.swing.JButton soundIcon;
+    private javax.swing.JPanel titleArtist;
+    private javax.swing.JPanel titleArtist1;
+    private javax.swing.JPanel titleArtist2;
+    private javax.swing.JLabel titleLabel;
+    private javax.swing.JLabel titleLabel1;
+    private javax.swing.JLabel titleLabel2;
     private javax.swing.JSlider volumeSlider;
+    private javax.swing.JLabel yearLabel;
+    private javax.swing.JLabel yearLabel1;
+    private javax.swing.JLabel yearLabel2;
     // End of variables declaration//GEN-END:variables
 }
