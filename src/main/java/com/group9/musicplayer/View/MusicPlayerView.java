@@ -5,6 +5,8 @@
 package com.group9.musicplayer.View;
 
 
+import com.group9.musicplayer.Model.MusicPlayerModel;
+import com.group9.musicplayer.Model.Song;
 import com.group9.musicplayer.View.RoundedBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -12,8 +14,10 @@ import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.util.Hashtable;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  *
@@ -23,7 +27,12 @@ public class MusicPlayerView extends javax.swing.JFrame {
     
     
     //if the song is playing
-    private static boolean isPlaying = false;
+    private static boolean isPlaying = true;
+    
+    private MusicPlayerModel musicPlayer;
+    
+    //allow us to use file explorer in our app
+    private JFileChooser jFileChooser;
     
     //needed for commit
     
@@ -32,6 +41,7 @@ public class MusicPlayerView extends javax.swing.JFrame {
      */
     public MusicPlayerView() {
         initComponents();
+        
         LyricsArea.setBorder(new RoundedBorder(30));
         customizeButton(pauseandplayButton, "src/main/java/Assets/play.png");
         customizeButton(nextButton, "src/main/java/Assets/next.png");
@@ -45,6 +55,25 @@ public class MusicPlayerView extends javax.swing.JFrame {
         });
         soundIcon.setEnabled(false);
         songNameplace.setHorizontalAlignment(JTextField.CENTER);
+        
+        
+        musicPlayer = new MusicPlayerModel(this);
+        
+        jFileChooser = new JFileChooser();
+        
+        //set a default path for file explorer
+        jFileChooser.setCurrentDirectory(new File("src/main/java/Assets"));
+        
+        //filter file chooser to only see .mp3 files
+        jFileChooser.setFileFilter(new FileNameExtensionFilter("MP3", "mp3"));
+        
+        addGuiComponents();
+    }
+    
+    
+    private void addGuiComponents(){
+        //add toolbar
+        addToolbar();
     }
     
     private void customizeButton(JButton button, String iconPath) {
@@ -79,7 +108,106 @@ public class MusicPlayerView extends javax.swing.JFrame {
         }
     }
     
+    private void addToolbar(){
+        JToolBar toolBar = new JToolBar();
+        toolBar.setBounds(0,0,getWidth(),20);
+        
+        //prevent toolbar from being moved
+        toolBar.setFloatable(false);
+        
+        //add drop down menu
+        JMenuBar menuBar = new JMenuBar();
+        toolBar.add(menuBar);
+        
+        //now we will add a song menu where we will place the loading song option
+        JMenu songMenu = new JMenu("Song");
+        menuBar.add(songMenu);
+        
+        //add the "load song" item in the songMenu
+        JMenuItem loadSong = new JMenuItem("Load Song");
+        loadSong.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent e){
+                //an integer is returned to us to let us know what the user did
+                int result = jFileChooser.showOpenDialog(MusicPlayerView.this);
+                File selectedFile = jFileChooser.getSelectedFile();
+                
+                //this means that we are also checking if the user pressed the open button
+                if(result == JFileChooser.APPROVE_OPTION && selectedFile != null){
+                    //create a song obj based on selected file
+                    Song song = new Song(selectedFile.getPath());
+                    
+                    //load song in music player
+                    musicPlayer.loadSong(song);
+                    
+                    //update song title and artist
+                    updateSongTitleAndArtist(song);
+                    
+                    //update duration slider
+                    updatePlaybackSlider(song);
+                    
+                    //toggle on pause button and toggle off play button
+                    enablePauseButtonDisplayPlayButton();
+                    
+                }
+            }
+        });
+        songMenu.add(loadSong);
+        
+        //now we will add the playlist menu
+        JMenu playlistMenu = new JMenu("Playlist");
+        menuBar.add(playlistMenu);
+        
+        //then add teh items to the playlist menu
+        JMenuItem createPlaylist = new JMenuItem("Create Playlist");
+        playlistMenu.add(createPlaylist);
+        
+        JMenuItem loadPlaylist = new JMenuItem("Load Playlist");
+        playlistMenu.add(loadPlaylist);
+        
+        add(toolBar);
     
+    }    
+    
+    //this will be used to update our slider from the music player class
+    public void setPlaybackSliderValue(int frame){
+        durationSlider.setValue(frame);
+    }
+    
+    private void updateSongTitleAndArtist(Song song){
+        songNameplace.setText(song.getSongTitle()+ " by "+ song.getSongArtist());
+    }
+    
+    private void updatePlaybackSlider(Song song){
+        durationSlider.setMaximum(song.getMp3File().getFrameCount());
+        
+        //create teh song length label
+        Hashtable<Integer, JLabel> labelTable = new Hashtable<>();
+        
+        //beginning will be 00:00
+        JLabel labelBeginning = new JLabel("00:00");
+        labelBeginning.setFont(new Font("Dialog",Font.BOLD,18));
+        
+        //end will vary depending on the song
+        JLabel labelEnd = new JLabel(song.getSongLength());
+        labelEnd.setFont(new Font("Dialog",Font.BOLD,18));
+        
+        labelTable.put(0, labelBeginning);
+        labelTable.put(song.getMp3File().getFrameCount(),labelEnd);
+        
+        durationSlider.setLabelTable(labelTable);
+        durationSlider.setPaintLabels(true);
+    }
+    
+    private void enablePauseButtonDisplayPlayButton(){
+        //retrieve reference to play button from playbackBtns panel
+        pauseandplayButton.setIcon(new ImageIcon("src/main/java/Assets/pause.png"));
+    }
+    
+    private void enablePlayButtonDisplayPauseButton(){
+        //retrieve reference to play button from playbackBtns panel
+        pauseandplayButton.setIcon(new ImageIcon("src/main/java/Assets/play.png"));
+    }
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -95,7 +223,11 @@ public class MusicPlayerView extends javax.swing.JFrame {
         LyricsArea = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        jPanel4 = new javax.swing.JPanel();
+        getSong = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        btnsPanel = new javax.swing.JPanel();
         pauseandplayButton = new javax.swing.JButton();
         nextButton = new javax.swing.JButton();
         previousButton = new javax.swing.JButton();
@@ -107,6 +239,7 @@ public class MusicPlayerView extends javax.swing.JFrame {
         jPanel6 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1000, 625));
         setResizable(false);
 
         jPanel1.setPreferredSize(new java.awt.Dimension(1000, 600));
@@ -120,7 +253,19 @@ public class MusicPlayerView extends javax.swing.JFrame {
         jPanel2.setPreferredSize(new java.awt.Dimension(650, 450));
 
         jPanel3.setPreferredSize(new java.awt.Dimension(605, 380));
-        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.LINE_AXIS));
+        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.Y_AXIS));
+
+        getSong.setText("jButton1");
+        jPanel3.add(getSong);
+
+        jButton2.setText("jButton2");
+        jPanel3.add(jButton2);
+
+        jButton3.setText("jButton3");
+        jPanel3.add(jButton3);
+
+        jButton4.setText("jButton4");
+        jPanel3.add(jButton4);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -139,8 +284,8 @@ public class MusicPlayerView extends javax.swing.JFrame {
                 .addContainerGap(35, Short.MAX_VALUE))
         );
 
-        jPanel4.setBackground(new java.awt.Color(0, 0, 51));
-        jPanel4.setPreferredSize(new java.awt.Dimension(486, 70));
+        btnsPanel.setBackground(new java.awt.Color(0, 0, 51));
+        btnsPanel.setPreferredSize(new java.awt.Dimension(486, 70));
 
         pauseandplayButton.setPreferredSize(new java.awt.Dimension(50, 50));
         pauseandplayButton.addActionListener(new java.awt.event.ActionListener() {
@@ -172,23 +317,23 @@ public class MusicPlayerView extends javax.swing.JFrame {
 
         songNameplace.setEditable(false);
 
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
+        javax.swing.GroupLayout btnsPanelLayout = new javax.swing.GroupLayout(btnsPanel);
+        btnsPanel.setLayout(btnsPanelLayout);
+        btnsPanelLayout.setHorizontalGroup(
+            btnsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnsPanelLayout.createSequentialGroup()
                 .addGap(50, 50, 50)
                 .addComponent(previousButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(pauseandplayButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(nextButton, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                .addGroup(btnsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(btnsPanelLayout.createSequentialGroup()
                         .addGap(35, 35, 35)
                         .addComponent(durationSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel4Layout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, btnsPanelLayout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(songNameplace, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(37, 37, 37)))
@@ -197,26 +342,26 @@ public class MusicPlayerView extends javax.swing.JFrame {
                 .addComponent(volumeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(40, Short.MAX_VALUE))
         );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+        btnsPanelLayout.setVerticalGroup(
+            btnsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(btnsPanelLayout.createSequentialGroup()
+                .addGroup(btnsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(btnsPanelLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel4Layout.createSequentialGroup()
+                        .addGroup(btnsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, btnsPanelLayout.createSequentialGroup()
                                 .addComponent(durationSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(songNameplace, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(pauseandplayButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(previousButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(nextButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGroup(btnsPanelLayout.createSequentialGroup()
                         .addGap(15, 15, 15)
-                        .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(btnsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(soundIcon, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(volumeSlider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(10, Short.MAX_VALUE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         jPanel5.setBackground(new java.awt.Color(0, 0, 51));
@@ -229,7 +374,7 @@ public class MusicPlayerView extends javax.swing.JFrame {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 70, Short.MAX_VALUE)
+            .addGap(0, 93, Short.MAX_VALUE)
         );
 
         jPanel6.setBackground(new java.awt.Color(255, 255, 255));
@@ -259,7 +404,7 @@ public class MusicPlayerView extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, 760, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(btnsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 760, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,15 +415,14 @@ public class MusicPlayerView extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(15, 15, 15)
-                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(34, 34, 34)
-                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 32, Short.MAX_VALUE))
+                        .addComponent(btnsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 24, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -298,17 +442,31 @@ public class MusicPlayerView extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void pauseandplayButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_pauseandplayButtonActionPerformed
-        
-                if (isPlaying) {
-                    // Pause the media, update icon
-                    pauseandplayButton.setIcon(new ImageIcon("src/main/java/Assets/pause.png"));
-                } else {
-                    // Play the media, update icon
-                    pauseandplayButton.setIcon(new ImageIcon("src/main/java/Assets/play.png"));
+        //toggle off pause button and toggle on play button
+        if (isPlaying) {
+                    // Pause the song
+                    musicPlayer.pauseSong();
+                    enablePlayButtonDisplayPauseButton();
+                } 
+        else {
+                    // Play the song
+                    musicPlayer.playCurrentSong();
+                    enablePauseButtonDisplayPlayButton();
                 }
                 // Toggle the playing state
                 isPlaying = !isPlaying;
             
+        
+//                if (isPlaying) {
+//                    // Pause the media, update icon
+//                    pauseandplayButton.setIcon(new ImageIcon("src/main/java/Assets/pause.png"));
+//                } else {
+//                    // Play the media, update icon
+//                    pauseandplayButton.setIcon(new ImageIcon("src/main/java/Assets/play.png"));
+//                }
+//                // Toggle the playing state
+//                isPlaying = !isPlaying;
+//            
 
         // TODO add your handling code here:
     }//GEN-LAST:event_pauseandplayButtonActionPerformed
@@ -369,11 +527,15 @@ public class MusicPlayerView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea LyricsArea;
+    private javax.swing.JPanel btnsPanel;
     private javax.swing.JSlider durationSlider;
+    private javax.swing.JButton getSong;
+    private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
