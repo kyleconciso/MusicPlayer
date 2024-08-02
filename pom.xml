@@ -25,14 +25,6 @@
             <artifactId>AbsoluteLayout</artifactId>
             <version>RELEASE220</version>
         </dependency>
-    </dependencies>
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>22</maven.compiler.source>
-        <maven.compiler.target>22</maven.compiler.target>
-        <exec.mainClass>com.group9.musicplayer.Main</exec.mainClass>
-    </properties>
-    <dependencies>
         <dependency>
             <groupId>org.jaudiotagger</groupId>
             <artifactId>jaudiotagger</artifactId>
@@ -49,5 +41,12 @@
             <version>0.9.0</version>
         </dependency>
     </dependencies>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.source>22</maven.compiler.source>
+        <maven.compiler.target>22</maven.compiler.target>
+        <exec.mainClass>com.group9.musicplayer.Main</exec.mainClass>
+    </properties>
+
     
 </project>

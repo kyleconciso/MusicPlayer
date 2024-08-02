@@ -627,6 +627,10 @@
               </Events>
             </Component>
             <Component class="javax.swing.JSlider" name="durationSlider">
+              <Events>
+                <EventHandler event="mousePressed" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="durationSliderMousePressed"/>
+                <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="durationSliderMouseReleased"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JButton" name="soundIcon">
               <Properties>

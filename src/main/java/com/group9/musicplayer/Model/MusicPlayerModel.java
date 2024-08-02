@@ -17,11 +17,17 @@ import javazoom.jl.player.advanced.PlaybackListener;
  */
 
 public class MusicPlayerModel extends PlaybackListener{
+    //used to update isPaused more synchronously
+    private static final Object playSignal = new Object();
+    
     //need reference to update gui in this class
     private MusicPlayerView view;
     
     //store song's details
     private Song currentSong;
+    public Song getCurrentSong(){
+        return currentSong;
+    }
     
     //use jlayer library to create and advanced player
     private AdvancedPlayer advancedPlayer;
@@ -31,9 +37,15 @@ public class MusicPlayerModel extends PlaybackListener{
     
     //stores in the last frame when the playback is finished (used for pausing and resuming)
     private int currentFrame;
+    public void setCurrentFrame(int frame){
+        currentFrame = frame;
+    }
     
     //track how many milliseconds has passed since playing the song
     private int currentTimeInMilli;
+    public void setcurrentTimeInMilli(int timeInMilli){
+        currentTimeInMilli = timeInMilli;
+    }
     
     //constructor
     public MusicPlayerModel(MusicPlayerView view){
@@ -84,6 +96,8 @@ public class MusicPlayerModel extends PlaybackListener{
             //start music
             startMusicThread();
             
+            //start playback slider thread
+            startPlaybackSliderThread();
             
         }catch(Exception e){
             e.printStackTrace();
@@ -96,6 +110,12 @@ public class MusicPlayerModel extends PlaybackListener{
             public void run(){
                 try{
                     if(isPaused){
+                        synchronized(playSignal){
+                        isPaused = false;
+                        
+                        //notify the other thread to continue (makes sure that isPaused is updated to false properly)
+                        playSignal.notify();
+                    }
                         //resume music from last frame
                         advancedPlayer.play(currentFrame, Integer.MAX_VALUE);
                     }
@@ -116,18 +136,35 @@ public class MusicPlayerModel extends PlaybackListener{
         new Thread(new Runnable(){
             @Override
             public void run(){
+                if(isPaused){
+                    try{
+                        //wait till it gets notified by other thread to continue
+                        //makes sure that isPaused boolean flag updates to false before continuing
+                        synchronized(playSignal){
+                            playSignal.wait();
+                        }
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                                
                 while(!isPaused){
-                    //increment current time milli
-                    currentTimeInMilli++;
+                    try{
+                        //increment current time milli
+                        currentTimeInMilli++;
                     
-                    //calculate into frame value
-                    int calculatedFrame = (int)((double)currentTimeInMilli * currentSong.getFrameRatePerMilliseconds());
+                        //calculate into frame value
+                        int calculatedFrame = (int)((double)currentTimeInMilli * 2.08 * currentSong.getFrameRatePerMilliseconds());
                     
-                    //update GUI
-                    view.setPlaybackSliderValue(calculatedFrame);
+                        //update GUI
+                        view.setPlaybackSliderValue(calculatedFrame);
                     
-                    //mimic 1 millisecond using thread.sleep
-                    Thread.sleep(millis:1);
+                        //mimic 1 millisecond using thread.sleep
+                        Thread.sleep(1);
+                    
+                    }catch(Exception e){
+                        e.printStackTrace();
+                    }
                     
                 }
             }
@@ -145,7 +182,6 @@ public class MusicPlayerModel extends PlaybackListener{
     public void playbackFinished(PlaybackEvent evt) {
         //this method gets called when the song finishes or if the player gets closed
         System.out.println("Playback Finished");
-        
         if(isPaused){
             currentFrame += (int) ((double)evt.getFrame() * currentSong.getFrameRatePerMilliseconds());
 

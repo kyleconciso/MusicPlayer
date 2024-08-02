@@ -19,22 +19,44 @@ import java.io.File;
 import java.util.Hashtable;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-/**
- *
- * @author psalm
- */
+
 public class MusicPlayerView extends javax.swing.JFrame implements PropertyChangeListener {
     
     // PCS
     public void propertyChange(PropertyChangeEvent evt) {
-        
+        switch (evt.getPropertyName()) {
+            case "playing" : {
+                
+            }
+            case "songList" : {
+                
+            }
+            case "volume" : {
+                
+            }
+            case "playbackTime" : {
+                
+            }
+            case "currentSong" : {
+                
+            }
+            case "lyricsOpen" : {
+                
+            }
+        }
     }
     
+    //if the song is playing
+    private static boolean isPlaying = true;
     
-    // Class
-    private boolean isPlaying;
+    private MusicPlayerModel musicPlayer;
+    
+    //allow us to use file explorer in our app
+    private JFileChooser jFileChooser;
+
     
     public MusicPlayerView() {
         initComponents();
@@ -204,6 +226,26 @@ public class MusicPlayerView extends javax.swing.JFrame implements PropertyChang
     private void enablePlayButtonDisplayPauseButton(){
         //retrieve reference to play button from playbackBtns panel
         pauseandplayButton.setIcon(new ImageIcon("src/main/java/Assets/play.png"));
+    }
+    
+    public void addNextButtonActionListener(ActionListener al) {
+        this.nextButton.addActionListener(al);
+    }
+ 
+    public void addPauseAndPlayButtonActionListener(ActionListener al) {
+        this.pauseandplayButton.addActionListener(al);
+    }
+ 
+    public void addPreviousButtonActionListener(ActionListener al) {
+        this.previousButton.addActionListener(al);
+    }
+ 
+    public void addVolumeSliderChangeListener(ChangeListener cl) {
+        this.volumeSlider.addChangeListener(cl);
+    }
+ 
+    public void addDurationSliderChangeListener(ChangeListener cl) {
+        this.durationSlider.addChangeListener(cl);
     }
     
     /**
@@ -541,6 +583,15 @@ public class MusicPlayerView extends javax.swing.JFrame implements PropertyChang
             }
         });
 
+        durationSlider.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                durationSliderMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                durationSliderMouseReleased(evt);
+            }
+        });
+
         soundIcon.setPreferredSize(new java.awt.Dimension(30, 30));
         soundIcon.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -722,6 +773,33 @@ public class MusicPlayerView extends javax.swing.JFrame implements PropertyChang
         soundIcon.setIcon(new ImageIcon("src/main/java/Assets/volume.png"));
         
     }//GEN-LAST:event_soundIconActionPerformed
+
+    private void durationSliderMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_durationSliderMousePressed
+        // TODO add your handling code here:
+        //when the user is holding the tick we want to pause the song
+        musicPlayer.pauseSong();
+    }//GEN-LAST:event_durationSliderMousePressed
+
+    private void durationSliderMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_durationSliderMouseReleased
+        // TODO add your handling code here:
+        //when the user drops the tick
+        JSlider source = (JSlider) evt.getSource();
+        
+        //get the frame value from where the user wants to playback to
+        int frame = source.getValue();
+        
+        //update the current frame in the music player to this frame
+        musicPlayer.setCurrentFrame(frame);
+        
+        //update current time in milli as well
+        musicPlayer.setcurrentTimeInMilli((int) (frame/(2.08*musicPlayer.getCurrentSong().getFrameRatePerMilliseconds())));
+        
+        //resume the song
+        musicPlayer.playCurrentSong();
+        
+        //toggle on pause button and toggle off play button
+        enablePauseButtonDisplayPlayButton();
+    }//GEN-LAST:event_durationSliderMouseReleased
 
     /**
      * @param args the command line arguments
