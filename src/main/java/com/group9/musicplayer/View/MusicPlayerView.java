@@ -9,7 +9,7 @@ import com.group9.musicplayer.View.RoundedBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.geom.RoundRectangle2D;
+import java.awt.geom.RoundRectangllie2D;
 import java.awt.image.BufferedImage;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -17,15 +17,25 @@ import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
-/**
- *
- * @author psalm
- */
+
 public class MusicPlayerView extends javax.swing.JFrame implements PropertyChangeListener {
     
     // PCS
     public void propertyChange(PropertyChangeEvent evt) {
-        
+        switch (evt.getPropertyName()) {
+            case "playing" : {
+                
+            }
+            case "songList" : {
+                
+            }
+            case "volume" : {
+                
+            }
+            case "playback" : {
+                
+            }
+        }
     }
     
     
