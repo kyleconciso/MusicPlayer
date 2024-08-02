@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.File;
 import java.util.Hashtable;
 import javax.imageio.ImageIO;
@@ -23,22 +25,17 @@ import javax.swing.filechooser.FileNameExtensionFilter;
  *
  * @author psalm
  */
-public class MusicPlayerView extends javax.swing.JFrame {
+public class MusicPlayerView extends javax.swing.JFrame implements PropertyChangeListener {
+    
+    // PCS
+    public void propertyChange(PropertyChangeEvent evt) {
+        
+    }
     
     
-    //if the song is playing
-    private static boolean isPlaying = true;
+    // Class
+    private boolean isPlaying;
     
-    private MusicPlayerModel musicPlayer;
-    
-    //allow us to use file explorer in our app
-    private JFileChooser jFileChooser;
-    
-    //needed for commit
-    
-    /**
-     * Creates new form MusicPlayerView
-     */
     public MusicPlayerView() {
         initComponents();
         
@@ -217,16 +214,46 @@ public class MusicPlayerView extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
+        label3 = new java.awt.Label();
+        label6 = new java.awt.Label();
+        label1 = new java.awt.Label();
         jPanel1 = new jPanelGradient();
         jScrollPane1 = new javax.swing.JScrollPane();
         LyricsArea = new javax.swing.JTextArea();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
-        getSong = new javax.swing.JButton();
+        songPanel = new javax.swing.JPanel();
+        songInfoPanel = new javax.swing.JPanel();
+        covertLabel = new javax.swing.JLabel();
+        titleArtist = new javax.swing.JPanel();
+        artistLabel = new javax.swing.JLabel();
+        titleLabel = new javax.swing.JLabel();
+        albumLabel = new javax.swing.JLabel();
+        yearLabel = new javax.swing.JLabel();
+        genreLabel = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        songPanel1 = new javax.swing.JPanel();
+        songInfoPanel1 = new javax.swing.JPanel();
+        covertLabel1 = new javax.swing.JLabel();
+        titleArtist1 = new javax.swing.JPanel();
+        artistLabel1 = new javax.swing.JLabel();
+        titleLabel1 = new javax.swing.JLabel();
+        albumLabel1 = new javax.swing.JLabel();
+        yearLabel1 = new javax.swing.JLabel();
+        genreLabel1 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        songPanel2 = new javax.swing.JPanel();
+        songInfoPanel2 = new javax.swing.JPanel();
+        covertLabel2 = new javax.swing.JLabel();
+        titleArtist2 = new javax.swing.JPanel();
+        artistLabel2 = new javax.swing.JLabel();
+        titleLabel2 = new javax.swing.JLabel();
+        albumLabel2 = new javax.swing.JLabel();
+        yearLabel2 = new javax.swing.JLabel();
+        genreLabel2 = new javax.swing.JLabel();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         btnsPanel = new javax.swing.JPanel();
         pauseandplayButton = new javax.swing.JButton();
         nextButton = new javax.swing.JButton();
@@ -237,6 +264,12 @@ public class MusicPlayerView extends javax.swing.JFrame {
         songNameplace = new javax.swing.JTextField();
         jPanel5 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
+
+        label3.setText("label3");
+
+        label6.setText("label6");
+
+        label1.setText("label1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1000, 625));
@@ -253,19 +286,219 @@ public class MusicPlayerView extends javax.swing.JFrame {
         jPanel2.setPreferredSize(new java.awt.Dimension(650, 450));
 
         jPanel3.setPreferredSize(new java.awt.Dimension(605, 380));
-        jPanel3.setLayout(new javax.swing.BoxLayout(jPanel3, javax.swing.BoxLayout.Y_AXIS));
 
-        getSong.setText("jButton1");
-        jPanel3.add(getSong);
+        songPanel.setForeground(new java.awt.Color(204, 204, 204));
+        songPanel.setMaximumSize(new java.awt.Dimension(2147483647, 32));
+        songPanel.setMinimumSize(new java.awt.Dimension(222, 32));
+        songPanel.setPreferredSize(new java.awt.Dimension(605, 32));
+        songPanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton2.setText("jButton2");
-        jPanel3.add(jButton2);
+        songInfoPanel.setLayout(new java.awt.GridBagLayout());
 
-        jButton3.setText("jButton3");
-        jPanel3.add(jButton3);
+        covertLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        covertLabel.setText("coverArt");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 98;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        songInfoPanel.add(covertLabel, gridBagConstraints);
 
-        jButton4.setText("jButton4");
-        jPanel3.add(jButton4);
+        titleArtist.setLayout(new java.awt.BorderLayout());
+
+        artistLabel.setText("artist");
+        titleArtist.add(artistLabel, java.awt.BorderLayout.CENTER);
+
+        titleLabel.setText("title");
+        titleArtist.add(titleLabel, java.awt.BorderLayout.PAGE_START);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 46;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        songInfoPanel.add(titleArtist, gridBagConstraints);
+
+        albumLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        albumLabel.setText("album");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 98;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        songInfoPanel.add(albumLabel, gridBagConstraints);
+
+        yearLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        yearLabel.setText("year");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 98;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        songInfoPanel.add(yearLabel, gridBagConstraints);
+
+        genreLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        genreLabel.setText("genre");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 98;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        songInfoPanel.add(genreLabel, gridBagConstraints);
+
+        songPanel.add(songInfoPanel, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 30));
+
+        jButton1.setText("jButton1");
+        songPanel.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 30));
+
+        jPanel3.add(songPanel);
+
+        songPanel1.setForeground(new java.awt.Color(204, 204, 204));
+        songPanel1.setMaximumSize(new java.awt.Dimension(2147483647, 32));
+        songPanel1.setMinimumSize(new java.awt.Dimension(222, 32));
+        songPanel1.setPreferredSize(new java.awt.Dimension(605, 32));
+        songPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        songInfoPanel1.setLayout(new java.awt.GridBagLayout());
+
+        covertLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        covertLabel1.setText("coverArt");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 98;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        songInfoPanel1.add(covertLabel1, gridBagConstraints);
+
+        titleArtist1.setLayout(new java.awt.BorderLayout());
+
+        artistLabel1.setText("artist");
+        titleArtist1.add(artistLabel1, java.awt.BorderLayout.CENTER);
+
+        titleLabel1.setText("title");
+        titleArtist1.add(titleLabel1, java.awt.BorderLayout.PAGE_START);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 46;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        songInfoPanel1.add(titleArtist1, gridBagConstraints);
+
+        albumLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        albumLabel1.setText("album");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 98;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        songInfoPanel1.add(albumLabel1, gridBagConstraints);
+
+        yearLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        yearLabel1.setText("year");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 98;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        songInfoPanel1.add(yearLabel1, gridBagConstraints);
+
+        genreLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        genreLabel1.setText("genre");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 98;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        songInfoPanel1.add(genreLabel1, gridBagConstraints);
+
+        songPanel1.add(songInfoPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 30));
+
+        jButton2.setText("jButton1");
+        songPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 30));
+
+        jPanel3.add(songPanel1);
+
+        songPanel2.setForeground(new java.awt.Color(204, 204, 204));
+        songPanel2.setMaximumSize(new java.awt.Dimension(2147483647, 32));
+        songPanel2.setMinimumSize(new java.awt.Dimension(222, 32));
+        songPanel2.setPreferredSize(new java.awt.Dimension(605, 32));
+        songPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        songInfoPanel2.setLayout(new java.awt.GridBagLayout());
+
+        covertLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        covertLabel2.setText("coverArt");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 98;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        songInfoPanel2.add(covertLabel2, gridBagConstraints);
+
+        titleArtist2.setLayout(new java.awt.BorderLayout());
+
+        artistLabel2.setText("artist");
+        titleArtist2.add(artistLabel2, java.awt.BorderLayout.CENTER);
+
+        titleLabel2.setText("title");
+        titleArtist2.add(titleLabel2, java.awt.BorderLayout.PAGE_START);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.gridheight = 2;
+        gridBagConstraints.ipadx = 46;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        songInfoPanel2.add(titleArtist2, gridBagConstraints);
+
+        albumLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        albumLabel2.setText("album");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 2;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 98;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        songInfoPanel2.add(albumLabel2, gridBagConstraints);
+
+        yearLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        yearLabel2.setText("year");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 3;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 98;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        songInfoPanel2.add(yearLabel2, gridBagConstraints);
+
+        genreLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        genreLabel2.setText("genre");
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 4;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.ipadx = 98;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
+        gridBagConstraints.insets = new java.awt.Insets(8, 0, 0, 0);
+        songInfoPanel2.add(genreLabel2, gridBagConstraints);
+
+        songPanel2.add(songInfoPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 30));
+
+        jButton3.setText("jButton1");
+        songPanel2.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 30));
+
+        jPanel3.add(songPanel2);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -527,23 +760,52 @@ public class MusicPlayerView extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea LyricsArea;
+    private javax.swing.JLabel albumLabel;
+    private javax.swing.JLabel albumLabel1;
+    private javax.swing.JLabel albumLabel2;
+    private javax.swing.JLabel artistLabel;
+    private javax.swing.JLabel artistLabel1;
+    private javax.swing.JLabel artistLabel2;
     private javax.swing.JPanel btnsPanel;
+    private javax.swing.JLabel covertLabel;
+    private javax.swing.JLabel covertLabel1;
+    private javax.swing.JLabel covertLabel2;
     private javax.swing.JSlider durationSlider;
-    private javax.swing.JButton getSong;
+    private javax.swing.JLabel genreLabel;
+    private javax.swing.JLabel genreLabel1;
+    private javax.swing.JLabel genreLabel2;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
+    private java.awt.Label label1;
+    private java.awt.Label label3;
+    private java.awt.Label label6;
     private javax.swing.JButton nextButton;
     private javax.swing.JButton pauseandplayButton;
     private javax.swing.JButton previousButton;
+    private javax.swing.JPanel songInfoPanel;
+    private javax.swing.JPanel songInfoPanel1;
+    private javax.swing.JPanel songInfoPanel2;
     private javax.swing.JTextField songNameplace;
+    private javax.swing.JPanel songPanel;
+    private javax.swing.JPanel songPanel1;
+    private javax.swing.JPanel songPanel2;
     private javax.swing.JButton soundIcon;
+    private javax.swing.JPanel titleArtist;
+    private javax.swing.JPanel titleArtist1;
+    private javax.swing.JPanel titleArtist2;
+    private javax.swing.JLabel titleLabel;
+    private javax.swing.JLabel titleLabel1;
+    private javax.swing.JLabel titleLabel2;
     private javax.swing.JSlider volumeSlider;
+    private javax.swing.JLabel yearLabel;
+    private javax.swing.JLabel yearLabel1;
+    private javax.swing.JLabel yearLabel2;
     // End of variables declaration//GEN-END:variables
 }
