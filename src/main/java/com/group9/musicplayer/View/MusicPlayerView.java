@@ -16,6 +16,7 @@ import java.beans.PropertyChangeListener;
 import java.io.File;
 import javax.imageio.ImageIO;
 import javax.swing.*;
+import javax.swing.event.ChangeListener;
 
 /**
  *
@@ -25,9 +26,52 @@ public class MusicPlayerView extends javax.swing.JFrame implements PropertyChang
     
     // PCS
     public void propertyChange(PropertyChangeEvent evt) {
-        
+        switch (evt.getPropertyName()) {
+            case "playing" : {
+                if ((boolean)evt.getNewValue()==true) {
+                   pauseandplayButton.setIcon(new ImageIcon("src/main/java/Assets/play.png"));
+                } else {
+                   pauseandplayButton.setIcon(new ImageIcon("src/main/java/Assets/pause.png"));
+                }
+            }
+            case "songList" : {
+                
+            }
+            case "volume" : {
+                //
+            }
+            case "playbackTime" : {
+                this.durationSlider.setValue((int)((float)evt.getNewValue()*100));
+            }
+            case "currentSong" : {
+                //
+            }
+            case "lyricsOpen" : {
+                //
+            }
+        } 
     }
     
+    //  View
+    public void addNextButtonActionListener(ActionListener al) {
+        this.nextButton.addActionListener(al);
+    }
+    
+    public void addPauseAndPlayButtonActionListener(ActionListener al) {
+        this.pauseandplayButton.addActionListener(al);
+    }
+    
+    public void addPreviousButtonActionListener(ActionListener al) {
+        this.previousButton.addActionListener(al);
+    }
+    
+    public void addVolumeSliderChangeListener(ChangeListener cl) {
+        this.volumeSlider.addChangeListener(cl);
+    }
+    
+    public void addDurationSliderChangeListener(ChangeListener cl) {
+        this.durationSlider.addChangeListener(cl);
+    }
     
     // Class
     private boolean isPlaying;
@@ -47,7 +91,10 @@ public class MusicPlayerView extends javax.swing.JFrame implements PropertyChang
         });
         soundIcon.setEnabled(false);
         songNameplace.setHorizontalAlignment(JTextField.CENTER);
+        this.durationSlider.setMinimum(0);
+        this.durationSlider.setMaximum(100);
     }
+    
     
     private void customizeButton(JButton button, String iconPath) {
         button.setIcon(new ImageIcon(iconPath));
